@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-const DiaryEditor = () => {
+const DiaryEditor = ({ onCreate }) => {
   const authorInput = useRef();
 
   const contentInput = useRef();
@@ -21,14 +21,21 @@ const DiaryEditor = () => {
   const handleSubmit = () => {
     if (text.author.length < 1) {
       authorInput.current.focus();
-      authorInput.current.placeholder = "한 글자 이상 입력해주세요";
+      authorInput.current.placeholder = "Write at least 1 letter.";
       return;
     }
     if (text.content.length < 1) {
       contentInput.current.focus();
-      contentInput.current.placeholder = "한 글자 이상 입력해주세요";
+      contentInput.current.placeholder = "Write at least 1 letter.";
       return;
     }
+
+    onCreate(text.author, text.content, text.emotion);
+    setText({
+      author: "",
+      content: "",
+      emotion: 1,
+    });
   };
 
   return (
