@@ -63,3 +63,8 @@ textarea {
   margin-bottom: 30px;
   margin-top: 30px;
 }
+
+.DiaryItem .content textarea {
+  width: 500px;
+  height: 80px;
+}

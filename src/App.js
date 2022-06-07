@@ -1,9 +1,31 @@
 import DiaryEditor from "./DiaryEditor";
 import "./App.css";
 import DiaryList from "./DiaryList";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function App() {
+  const getData = async () => {
+    const res = await fetch(
+      `https://jsonplaceholder.typicode.com/comments`
+    ).then((res) => res.json());
+
+    const initData = res.slice(0, 20).map((it) => {
+      return {
+        author: it.email,
+        content: it.body,
+        emotion: Math.floor(Math.random() * 5) + 1,
+        createdAt: new Date().getTime(),
+        id: dataId.current++,
+      };
+    });
+
+    setDiaryData(initData);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   // App을 0단계, 자식 컴포넌트인 DiaryList와 DiaryEditor는 1단계라고 했을 때
   // 같은 단계에서는 데이터를 주고받을 수 없다
   // 따라서 부모 컴포넌트에 공통된 State를 만들고
