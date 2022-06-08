@@ -1,7 +1,33 @@
 import DiaryEditor from "./DiaryEditor";
 import "./App.css";
 import DiaryList from "./DiaryList";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case `INIT`: {
+      return action.diaryData;
+    }
+    case `CREATE`: {
+      const createdAt = new Date().getTime();
+      const newItem = {
+        ...action.diaryData,
+        createdAt,
+      };
+      return [newItem, ...state];
+    }
+    case `REMOVE`: {
+      return state.filter((it) => it.id !== action.targetId);
+    }
+    case `EDIT`: {
+      return state.map((it) =>
+        it.id === action.targetId ? { ...it, content: action.newContent } : it
+      );
+    }
+    default:
+      return state;
+  }
+};
 
 function App() {
   const getData = async () => {
@@ -18,46 +44,33 @@ function App() {
         id: dataId.current++,
       };
     });
-    setDiaryData(initData);
+    dispatch({ type: `INIT`, diaryData: initData });
   };
 
   useEffect(() => {
     getData();
   }, []);
 
-  // App을 0단계, 자식 컴포넌트인 DiaryList와 DiaryEditor는 1단계라고 했을 때
-  // 같은 단계에서는 데이터를 주고받을 수 없다
-  // 따라서 부모 컴포넌트에 공통된 State를 만들고
-  const [diaryData, setDiaryData] = useState([]);
+  const [diaryData, dispatch] = useReducer(reducer, []);
 
   const dataId = useRef(0);
   // DiaryEditor가 일기를 수정하는 setDiaryData 이벤트를 onCreate를 통해 발생시키면,
   // App 컴포넌트에서 diaryData를 DiaryList컴포넌트에 내려주어 diaryData 배열에 변화를 일으킴
-  const onCreate = (author, content, emotion) => {
-    const createdAt = new Date().getTime();
-    const newItem = {
-      author,
-      content,
-      emotion,
-      createdAt,
-      id: dataId.current,
-    };
+  const onCreate = useCallback((author, content, emotion) => {
+    dispatch({
+      type: `CREATE`,
+      diaryData: { author, content, emotion, id: dataId.current },
+    });
     dataId.current += 1;
-    setDiaryData([newItem, ...diaryData]);
-  };
+  }, []);
 
-  const onRemove = (targetId) => {
-    const newDiaryList = diaryData.filter((it) => it.id !== targetId);
-    setDiaryData(newDiaryList);
-  };
+  const onRemove = useCallback((targetId) => {
+    dispatch({ type: `REMOVE`, targetId });
+  }, []);
 
-  const onEdit = (targetId, newContent) => {
-    setDiaryData(
-      diaryData.map((it) =>
-        it.id === targetId ? { ...it, content: newContent } : it
-      )
-    );
-  };
+  const onEdit = useCallback((targetId, newContent) => {
+    dispatch({ type: `EDIT`, targetId, newContent });
+  }, []);
 
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = diaryData.filter((it) => it.emotion >= 3).length;

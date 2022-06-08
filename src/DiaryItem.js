@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const DiaryItem = ({
   onEdit,
@@ -9,6 +9,8 @@ const DiaryItem = ({
   createdAt,
   id,
 }) => {
+  useEffect(() => console.log(`no. ${id} rendered`));
+
   const handleRemove = () => {
     if (window.confirm(`Do you really want to Remove diary no.${id + 1}?`)) {
       onRemove(id);
@@ -79,4 +81,4 @@ const DiaryItem = ({
   );
 };
 
-export default DiaryItem;
+export default React.memo(DiaryItem);
