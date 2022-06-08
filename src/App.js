@@ -1,7 +1,13 @@
 import DiaryEditor from "./DiaryEditor";
 import "./App.css";
 import DiaryList from "./DiaryList";
-import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from "react";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -29,6 +35,9 @@ const reducer = (state, action) => {
   }
 };
 
+export const DiaryStateContext = React.createContext();
+export const DiaryDispatchContext = React.createContext();
+
 function App() {
   const getData = async () => {
     const res = await fetch(
@@ -54,8 +63,7 @@ function App() {
   const [diaryData, dispatch] = useReducer(reducer, []);
 
   const dataId = useRef(0);
-  // DiaryEditor가 일기를 수정하는 setDiaryData 이벤트를 onCreate를 통해 발생시키면,
-  // App 컴포넌트에서 diaryData를 DiaryList컴포넌트에 내려주어 diaryData 배열에 변화를 일으킴
+
   const onCreate = useCallback((author, content, emotion) => {
     dispatch({
       type: `CREATE`,
@@ -72,6 +80,10 @@ function App() {
     dispatch({ type: `EDIT`, targetId, newContent });
   }, []);
 
+  const memoizedDispatches = useMemo(() => {
+    return { onCreate, onRemove, onEdit };
+  }, []);
+
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = diaryData.filter((it) => it.emotion >= 3).length;
     const badCount = diaryData.length - goodCount;
@@ -82,14 +94,18 @@ function App() {
   const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
 
   return (
-    <div className="App">
-      <DiaryEditor onCreate={onCreate} />
-      <div>
-        Number of good emotions : {goodCount} , Ratio : {goodRatio}%
-      </div>
-      <div> Number of bad emotions : {badCount} </div>
-      <DiaryList onEdit={onEdit} onRemove={onRemove} listOfDiary={diaryData} />
-    </div>
+    <DiaryStateContext.Provider value={diaryData}>
+      <DiaryDispatchContext.Provider value={memoizedDispatches}>
+        <div className="App">
+          <DiaryEditor />
+          <div>
+            Number of good emotions : {goodCount} , Ratio : {goodRatio}%
+          </div>
+          <div> Number of bad emotions : {badCount} </div>
+          <DiaryList />
+        </div>
+      </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
   );
 }
 

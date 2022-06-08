@@ -1,15 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
+import { DiaryDispatchContext } from "./App";
 
-const DiaryItem = ({
-  onEdit,
-  onRemove,
-  author,
-  content,
-  emotion,
-  createdAt,
-  id,
-}) => {
-  useEffect(() => console.log(`no. ${id} rendered`));
+const DiaryItem = ({ author, content, emotion, createdAt, id }) => {
+  const { onRemove, onEdit } = useContext(DiaryDispatchContext);
 
   const handleRemove = () => {
     if (window.confirm(`Do you really want to Remove diary no.${id + 1}?`)) {
