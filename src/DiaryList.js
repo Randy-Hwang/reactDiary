@@ -3,6 +3,7 @@ import { DiaryStateContext } from "./App";
 import DiaryItem from "./DiaryItem";
 
 const DiaryList = () => {
+  // for the test commit
   const listOfDiary = useContext(DiaryStateContext);
   return (
     <div className="DiaryList">
