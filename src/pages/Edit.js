@@ -12,6 +12,11 @@ const Edit = () => {
   const diaryList = useContext(DiaryStateContext);
 
   useEffect(() => {
+    const titleElement = document.getElementsByTagName("title")[0];
+    titleElement.innerHTML = `Emotional Diary - Editing Diary No.${id}`;
+  }, [id]);
+
+  useEffect(() => {
     if (diaryList.length >= 1) {
       const targetDiary = diaryList.find(
         (it) => parseInt(it.id) === parseInt(id)
@@ -22,7 +27,7 @@ const Edit = () => {
         navigate("/", { replace: true });
       }
     }
-  }, [id, diaryList]);
+  }, [id, diaryList, navigate]);
 
   return (
     <div>

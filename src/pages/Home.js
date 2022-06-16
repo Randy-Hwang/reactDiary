@@ -23,10 +23,14 @@ const Home = () => {
       ).getTime();
 
       // 날짜를 0일로 설정하게 되면 바로 이전 달의 마지막 날짜를 가리키게 됨.
+      // 날짜, 시 , 분, 초
       const lastDay = new Date(
         curDate.getFullYear(),
         curDate.getMonth() + 1,
-        0
+        0,
+        23,
+        59,
+        59
       ).getTime();
 
       setData(
