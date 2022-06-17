@@ -43,20 +43,20 @@ const Diary = () => {
     return (
       <div className="DiaryPage">
         <MyHeader
-          headText={`Diary at ${getStringDate(new Date(data.date))}`}
+          headText={`${getStringDate(new Date(data.date))} 에 있었던 일`}
           leftChild={
-            <MyButton text={"< Go Back"} onClick={() => navigate(-1)} />
+            <MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)} />
           }
           rightChild={
             <MyButton
-              text={"Edit >"}
+              text={"수정하기 >"}
               onClick={() => navigate(`/edit/${data.id}`)}
             />
           }
         />
         <article>
           <section>
-            <h4> Emotion at that Time</h4>
+            <h4>그 날의 감정</h4>
             <div className="diary_img_wrapper">
               <img
                 src={curEmotionData.emotion_img}
@@ -68,7 +68,7 @@ const Diary = () => {
             </div>
           </section>
           <section>
-            <h4>Diary</h4>
+            <h4>그 날의 기록</h4>
             <div className="diary_content_wrapper">
               <p>{data.content}</p>
             </div>

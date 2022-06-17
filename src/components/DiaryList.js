@@ -4,14 +4,14 @@ import DiaryItem from "./DiaryItem";
 import MyButton from "./MyButton";
 
 const sortOptionList = [
-  { value: "latest", name: "latest" },
-  { value: "oldest", name: "oldest" },
+  { value: "latest", name: "최신순" },
+  { value: "oldest", name: "오래된순" },
 ];
 
 const filterOptionList = [
-  { value: "all", name: "all" },
-  { value: "good", name: "good only" },
-  { value: "bad", name: "bad only" },
+  { value: "all", name: "모두 보기" },
+  { value: "good", name: "좋았던 기억만" },
+  { value: "bad", name: "안좋았던 기억만" },
 ];
 
 const ControlMenu = React.memo(({ value, onChange, optionList }) => {
@@ -81,7 +81,7 @@ const DiaryList = ({ diaryList }) => {
         <div className="right_col">
           <MyButton
             type={"positive"}
-            text={"New Diary"}
+            text={"새 일기 쓰기"}
             onClick={() => navigate("/new")}
           />
         </div>

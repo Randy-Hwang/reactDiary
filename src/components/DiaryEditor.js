@@ -23,7 +23,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
   }, []);
 
   const handleSubmit = () => {
-    if (content.length < 5) {
+    if (content.length < 1) {
       contentRef.current.focus();
       return;
     }
@@ -42,7 +42,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
   };
 
   const handleRemove = () => {
-    if (window.confirm("Do you really want to delete this Diary?")) {
+    if (window.confirm("일기를 정말 삭제하시겠어요?")) {
       onRemove(originData.id);
       navigate("/", { replace: true });
     }
@@ -59,13 +59,15 @@ const DiaryEditor = ({ isEdit, originData }) => {
   return (
     <div className="DiaryEditor">
       <MyHeader
-        headText={isEdit ? "Edit Diary" : "Write New Diary"}
-        leftChild={<MyButton text={"< Go Back"} onClick={() => navigate(-1)} />}
+        headText={isEdit ? "일기 수정" : "새 일기 쓰기"}
+        leftChild={
+          <MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)} />
+        }
         rightChild={
           isEdit && (
             <MyButton
               type={"negative"}
-              text={"Delete"}
+              text={"삭제하기"}
               onClick={handleRemove}
             />
           )
@@ -73,7 +75,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
       />
       <div>
         <section>
-          <h4>What day is it Today?</h4>
+          <h4>언제 있었던 일인가요?</h4>
           <div className="input_box">
             <input
               className="input_date"
@@ -85,7 +87,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
         </section>
 
         <section>
-          <h4>Today's Feeling</h4>
+          <h4>기분은 어떠셨어요?</h4>
           <div className="input_box emotion_list_wrapper">
             {emotionList.map((it) => (
               <EmotionItem
@@ -99,10 +101,10 @@ const DiaryEditor = ({ isEdit, originData }) => {
         </section>
 
         <section>
-          <h4>Today's Diary</h4>
+          <h4>일기 쓰기</h4>
           <div className="input_box text_wrapper">
             <textarea
-              placeholder="Write Your Story"
+              placeholder="당신의 이야기를 들려주세요"
               ref={contentRef}
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -111,8 +113,8 @@ const DiaryEditor = ({ isEdit, originData }) => {
         </section>
         <section>
           <div className="control_box">
-            <MyButton text={"Cancel"} onClick={() => navigate(-1)} />
-            <MyButton text={"Save"} type={"positive"} onClick={handleSubmit} />
+            <MyButton text={"취소"} onClick={() => navigate(-1)} />
+            <MyButton text={"저장"} type={"positive"} onClick={handleSubmit} />
           </div>
         </section>
       </div>

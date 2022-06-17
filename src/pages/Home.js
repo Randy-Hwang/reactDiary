@@ -7,6 +7,11 @@ import DiaryList from "../components/DiaryList";
 import { DiaryStateContext } from "../App";
 
 const Home = () => {
+  useEffect(() => {
+    const titleElement = document.getElementsByTagName("title")[0];
+    titleElement.innerHTML = `Emotional Diary`;
+  }, []);
+
   const [data, setData] = useState([]);
 
   const diaryList = useContext(DiaryStateContext);
