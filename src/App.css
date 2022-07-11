@@ -12,12 +12,6 @@ body {
   margin: 0px;
 }
 
-/* .App {
-  padding: 20px;
-  font-family: "East Sea Dokdo", cursive;
-  font-family: "Nanum Myeongjo", serif;
-} */
-
 @media (min-width: 650px) {
   .App {
     width: 640px;
